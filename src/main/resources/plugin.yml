@@ -1,0 +1,14 @@
+name: A-bank
+version: '${version}'
+main: org.apo.abank.A_bank
+api-version: '1.20'
+commands:
+  bank:
+    description: 은행 기본 명령어
+    permission: Bank.bank
+  pay:
+    description: 돈 보내기 명령어
+    permission: Bank.pay
+  ebank:
+    description: 돈 기본 명령어
+    permission: Bank.eco
