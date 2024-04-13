@@ -29,7 +29,7 @@ public final class A_bank extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         instance=this;
-        if (setupEconomy()){
+        if (setupEconomy() && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
             new Command(this);
             new EcoCmd(this);
             new PayCmd(this);
@@ -37,7 +37,7 @@ public final class A_bank extends JavaPlugin {
             this.getLogger().info("Bank Plugin made by.APO2073");
             saveConfig();
         } else {
-            getLogger().warning("Vault plugin이 없습니다!\n"+getServer().getPluginManager().getPlugin("Vault"));
+            getLogger().warning("Vault plugin또는 PlaceHolderAPI 플러그인이 없습니다!\n");
             Bukkit.getPluginManager().disablePlugin(this);
         }
     }

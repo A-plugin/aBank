@@ -11,6 +11,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.Buffer;
@@ -42,48 +43,49 @@ public class Command implements TabExecutor {
                         map.put(pl.getName(), mo);
                     }
                     p.sendMessage("======§a[aBank]§f======");
-                    for (int i=0; i<map.size();i++) {
-                        // balance list
-                    }
-
                 }
                 if (args[0].equalsIgnoreCase("loan")) {
-                    String reg="^[\\d]*$";
-                    if (Pattern.matches(reg, args[1])){
-                        ItemStack loan=new ItemStack(Material.PAPER);
-                        ItemMeta m= loan.getItemMeta();
-                        m.setDisplayName("§a"+args[1]+"$");
-                        loan.setItemMeta(m);
-                        p.getInventory().addItem(loan);
-                        p.sendMessage(ChatColor.GOLD+"[aBank] 은행에서 "+args[1]+"$를 대출했습니다.");
-                        p.sendMessage(ChatColor.GOLD+"[aBank] 이자: "+aBank.getConfig().get("loan-per"));
-                        double money= Double.parseDouble(args[1]);
-                        money=money+((Integer.parseInt(aBank.getConfig().get("loan-per").toString()))/100);
-                        aBank.getConfig().set(p.getUniqueId()+".loan", money);
-                        aBank.saveConfig();
-                    }else {
-                        p.sendMessage(ChatColor.RED+"[aBank] NaN Money value");
+                    if (p.hasPermission("Bank.bank.loan")){
+                        String reg = "^[\\d]*$";
+                        if (Pattern.matches(reg, args[1])) {
+                            ItemStack loan = new ItemStack(Material.PAPER);
+                            ItemMeta m = loan.getItemMeta();
+                            m.setDisplayName("§a" + args[1] + "$");
+                            loan.setItemMeta(m);
+                            p.getInventory().addItem(loan);
+                            p.sendMessage(ChatColor.GOLD + "[aBank] 은행에서 " + args[1] + "$를 대출했습니다.");
+                            p.sendMessage(ChatColor.GOLD + "[aBank] 이자: " + aBank.getConfig().get("loan-per"));
+                            double money = Double.parseDouble(args[1]);
+                            aBank.getConfig().set(p.getUniqueId() + ".loan", money);
+                            aBank.saveConfig();
+                        } else {
+                            p.sendMessage(ChatColor.RED + "[aBank] NaN Money value");
+                        }
                     }
                 }
                 if (args[0].equalsIgnoreCase("loanM")) {
-                    String reg="^[\\d]*$";
-                    if (Pattern.matches(reg, args[1])){
-                        if (aBank.economy.getBalance(p)>=Integer.parseInt(args[1])){
-                            double money = aBank.getConfig().getDouble(p.getUniqueId() + ".loan");
-                            double mmoney = Double.parseDouble(args[1]);
-                            money -= mmoney;
-                            aBank.getConfig().set(p.getUniqueId() + ".loan", money);
-                            aBank.saveConfig();
-                            if (money <= 0) {
-                                p.sendMessage(ChatColor.GOLD + "[aBank] 빚을 전부 갚았습니다.");
+                    if (p.hasPermission("Bank.bank.loanM")){
+                        String reg = "^[\\d]*$";
+                        if (Pattern.matches(reg, args[1])) {
+                            if (aBank.economy.getBalance(p) >= Integer.parseInt(args[1])) {
+                                double money = aBank.getConfig().getDouble(p.getUniqueId() + ".loan");
+                                double mmoney = Double.parseDouble(args[1]);
+                                money -= mmoney;
+                                aBank.getConfig().set(p.getUniqueId() + ".loan", money);
+                                aBank.saveConfig();
+                                if (money <= 0) {
+                                    p.sendMessage(ChatColor.GOLD + "[aBank] 빚을 전부 갚았습니다.");
+                                }
                             }
+                        } else {
+                            p.sendMessage(ChatColor.RED + "[aBank] NaN Money value");
                         }
-                    }else {
-                        p.sendMessage(ChatColor.RED+"[aBank] NaN Money value");
                     }
                 }
                 if (args[0].equalsIgnoreCase("loanC")) {
-                    p.sendMessage(ChatColor.GOLD+"[aBank] 빚: "+aBank.getConfig().get(p.getUniqueId()+".loan"));
+                    if (p.hasPermission("Bank.bank.loanC")){
+                        p.sendMessage(ChatColor.GOLD + "[aBank] 빚: " + aBank.getConfig().get(p.getUniqueId() + ".loan"));
+                    }
                 }
                 return true;
             }

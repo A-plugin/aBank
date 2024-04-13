@@ -37,6 +37,7 @@ public class PayCmd implements TabExecutor {
                             aBank.economy.depositPlayer(pay, Double.parseDouble(args[1]));
                             aBank.economy.withdrawPlayer(p, Double.parseDouble(args[1]));
                             p.sendMessage(ChatColor.GREEN + "[aBank] Pay " + args[1] + "$ -> " + pay.getName());
+                            pay.sendMessage(ChatColor.GREEN + "[aBank] Paid "+p.getName()+" "+args[1]+ "$ -> me");
                         } else {
                             p.sendMessage(ChatColor.RED+"[aBank] 당신은 충분한 돈을 가지고 있지 않습니다!");
                         }
